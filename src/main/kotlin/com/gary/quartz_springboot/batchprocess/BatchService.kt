@@ -1,7 +1,10 @@
 package com.gary.quartz_springboot.batchprocess
 
+import arrow.core.Either
+import arrow.core.raise.either
 import com.gary.quartz_springboot.info.TimerInfo
 import com.gary.quartz_springboot.jobs.HelloWorldJob
+import com.gary.quartz_springboot.timeservice.QuartzSchedulerError
 import com.gary.quartz_springboot.timeservice.SchedulerService
 import org.springframework.stereotype.Service
 
@@ -21,5 +24,24 @@ class BatchService(val schedulerService: SchedulerService) {
         )
         schedulerService.scheduleJob(jobClass, timerInfo)
         logger.info("END :: runHelloWorldJob")
+    }
+
+    fun getAllRunningTimers(): List<TimerInfo> {
+        logger.info("START :: getAllRunningTimers")
+        val result = schedulerService.getAllRunningTimers()
+        result.fold(
+            { error -> logger.error("Error fetching running timers: $error") },
+            { timers -> return timers }
+        ).also {
+            logger.info("END :: getAllRunningTimers")
+        }
+        return emptyList()
+    }
+
+    fun getTimerById(timerId: String): Either<QuartzSchedulerError, TimerInfo> = either {
+        logger.info("START :: getTimerById")
+        val result = schedulerService.getTimerById(timerId)
+        logger.info("END :: getTimerById")
+        return result
     }
 }
