@@ -1,7 +1,7 @@
 package com.gary.quartz_springboot.info
 
 data class TimerInfo(
-    internal val totalFireCount: Integer,
+    internal val totalFireCount: Int,
     internal val runForever: Boolean,
     internal val repeatIntervalMs: Long,
     internal val initialOffsetMs: Long,
