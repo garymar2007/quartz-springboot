@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/timer")
 class BatchController(val batchService: BatchService) {
 
-    @PostMapping("/runhelloWorldJob")
+    @PostMapping("/runhelloworldjob")
     fun runHelloWorldJob() {
         batchService.runHelloWorldJob()
     }

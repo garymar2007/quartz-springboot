@@ -13,7 +13,7 @@ class BatchService(val schedulerService: SchedulerService) {
         logger.info("START :: runHelloWorldJob")
         val jobClass = HelloWorldJob::class.java
         val timerInfo = TimerInfo(
-            totalFireCount = 1,
+            totalFireCount = 5,
             runForever = false,
             repeatIntervalMs = 1000L,
             initialOffsetMs = 1000L,
