@@ -17,8 +17,9 @@ class BatchService(val schedulerService: SchedulerService) {
         val jobClass = HelloWorldJob::class.java
         val timerInfo = TimerInfo(
             totalFireCount = 5,
+            remainingFireCount = 5,
             runForever = false,
-            repeatIntervalMs = 1000L,
+            repeatIntervalMs = 2000L,
             initialOffsetMs = 1000L,
             callbackData = "Hello World Job"
         )
@@ -42,6 +43,13 @@ class BatchService(val schedulerService: SchedulerService) {
         logger.info("START :: getTimerById")
         val result = schedulerService.getTimerById(timerId)
         logger.info("END :: getTimerById")
+        return result
+    }
+
+    fun updateTimerById(timerId: String, timerInfo: TimerInfo): Either<QuartzSchedulerError, TimerInfo> = either {
+        logger.info("START :: updateTimerById")
+        val result = schedulerService.updateTimerById(timerId, timerInfo)
+        logger.info("END :: updateTimerById")
         return result
     }
 }

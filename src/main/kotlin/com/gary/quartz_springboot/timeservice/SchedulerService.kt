@@ -20,6 +20,8 @@ class SchedulerService(scheduler : Scheduler) {
     init {
         logger.info("SchedulerService initialized")
         scheduler.start()
+        // TODO: https://www.youtube.com/watch?v=HTUi_SaDYoY
+        scheduler.listenerManager.addSchedulerListener(SimpleTriggerlistener(this))
         logger.info("Scheduler started")
     }
 
@@ -75,6 +77,22 @@ class SchedulerService(scheduler : Scheduler) {
         }
 
         timerInfo
+    }
+
+    fun updateTimerById(timerId: String, timerInfo: TimerInfo): Either<QuartzSchedulerError, TimerInfo> = either {
+        logger.info("START :: Updating timer by ID: $timerId")
+        val jobDetail = scheduler.getJobDetail(JobKey(timerId))
+        ensureNotNull(jobDetail) {
+            QuartzSchedulerError(
+                errorCode = "SCHEDULER_ERROR",
+                errorMessage = "Failed to fetch job by timer id",
+                errorDetails = "Job of timer Id $timerId is not found"
+            )
+        }
+
+        jobDetail.jobDataMap.put(timerId, timerInfo)
+        logger.info("Timer info updated successfully")
+        return@either timerInfo
     }
 
     fun stopScheduler() {
